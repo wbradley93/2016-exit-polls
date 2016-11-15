@@ -1,6 +1,6 @@
 # 2016 Presidential Election Exit Poll Data
 
-Scraped from CNN's election website. Response data in `responses.json` consists of nested JSON objects structured as follows:
+Scraped from CNN's election website. Response data in `responses.json` consist of nested JSON objects structured as follows:
 
 ```
 {
@@ -27,7 +27,7 @@ Scraped from CNN's election website. Response data in `responses.json` consists 
 }
 ```
 
-National totals are included under 'state' `National`. Sample sizes in `responses.json` consists of nested JSON objects structured as follows:
+National totals are included under 'state' `National`. Sample size data in `samples.json` consist of nested JSON objects structured as follows:
 
 ```
 {
