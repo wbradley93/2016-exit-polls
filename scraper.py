@@ -40,8 +40,7 @@ for state in states:
                     table("tr")[row].contents[share].string
         samples[state][question] = table(class_="exit-poll-table__metadata")[0].get_text()
 
-    driver.quit()
-
+driver.quit()
 f = open('responses', 'w')
 f.write(json.dumps(data))
 f.close()
