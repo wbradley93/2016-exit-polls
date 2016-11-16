@@ -10,18 +10,18 @@ states = ['National', 'Arizona', 'California', 'Colorado', 'Florida', 'Georgia',
 
 data = {}
 samples = {}
+driver = webdriver.PhantomJS()
 
 for state in states:
     url = "http://edition.cnn.com/election/results/exit-polls/%s/president" % \
         state.lower().replace(" ", "-")
-    driver = webdriver.PhantomJS()
-    
+
     driver.get(url)
     time.sleep(2)
     bs = BeautifulSoup(driver.page_source, "lxml")
     data[state] = {}
     samples[state] = {}
-    
+
     for table in bs("div", "exit-poll-table"):
         candidates = []
         question = table(class_="exit-poll__question")[0].string
@@ -41,7 +41,7 @@ for state in states:
         samples[state][question] = table(class_="exit-poll-table__metadata")[0].get_text()
 
     driver.quit()
-    
+
 f = open('responses', 'w')
 f.write(json.dumps(data))
 f.close()
