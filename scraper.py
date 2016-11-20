@@ -25,6 +25,8 @@ for state in states:
     for table in bs("div", "exit-poll-table"):
         candidates = []
         question = table(class_="exit-poll__question")[0].string
+        for row in range(1,len(table("tr"))):
+            question += "/" + table("tr")[row].contents[0].contents[1]
         data[state][question] = {}
         for candidate in table("tr")[0]:
             if candidate.has_attr("data-lname"):
