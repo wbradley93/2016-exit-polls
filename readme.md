@@ -41,4 +41,4 @@ Sample size data in `full_samples.json` consist of nested JSON objects structure
 }
 ```
 
-Files with names beginning `20state_` contain only questions asked in at least 20 states.
+Files with names beginning `20state_` contain only questions asked in at least 20 states. Credit to robflaherty's Raphael US map for that.
