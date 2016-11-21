@@ -33,11 +33,16 @@ function getResponseOptions () {
 }
 
 function getIntVal (str) {
-    var int = parseInt(str.replace(/^\s+|\s+$/g, ""));
-    if (isNaN(int)) {
+    try {
+        var int = parseInt(str.replace(/^\s+|\s+$/g, ""));
+    } catch (e) {
         return 0;
-    } else {
-        return int;
+    } finally {
+        if (isNaN(int)) {
+            return 0;
+        } else {
+            return int;
+        }
     }
 }
 
