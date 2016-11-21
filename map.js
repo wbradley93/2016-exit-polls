@@ -8,7 +8,7 @@
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
 var colors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"}
 var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G"};
-var styles = ["#983ba8","#278098","#c87e0e","#3ee6dd","#b64a71","#5b0cf9","#DFC541"];
+var styles = ["#983ba8","#278098","#c87e0e","#35a029","#b64a71","#5b0cf9","#DFC541"];
 var usRaphael = {};
 var questions = [];
 
