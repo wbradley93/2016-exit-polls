@@ -39,3 +39,14 @@ ul.menu li a:focus, .active {background-color: #ccc;}
     border: 1px solid #ccc;
     border-top: none;
 }
+
+#legendContainer {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    left: -100px;
+    top: 375px;
+    float: left;
+    border: 2.5px solid grey;
+    border-radius: 10px;
+}

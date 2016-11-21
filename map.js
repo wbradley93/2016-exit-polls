@@ -3,7 +3,7 @@ var responses = {"Indiana": {"Is Clinton qualified to serve as president?/Yes/No
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
 var colors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"}
 var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G"};
-var styles = ["#983ba8","#278098","#c87e0e","#3ee6dd","#b64a71","#5b0cf9","#5d5349"];
+var styles = ["#983ba8","#278098","#c87e0e","#3ee6dd","#b64a71","#5b0cf9","#DFC541"];
 var usRaphael = {};
 var questions = [];
 
@@ -56,6 +56,31 @@ function styleResponses (q) {
     return rStyles;
 }
 
+function updateLegend (styles = {"Trump":"#ea1919", "Clinton":"#001dff", "Johnson":"#e8d01e", "Stein":"#18ce00", "Other/No Answer":"#e130e8"}) {
+    var sel = document.getElementById('legendKey');
+    while (sel.lastChild) {
+        sel.removeChild(sel.lastChild);
+    }
+    for (res in styles) {
+        var d = document.createElement('div');
+        var d2 = document.createElement('div');
+        d2.style["background-color"] = styles[res];
+        d2.style.height = "20px";
+        d2.style.width = "20px";
+        d2.style.display = "inline-block";
+        d2.style.margin = "0 5px";
+        var s = document.createElement('span');
+        s.innerHTML = res;
+        s.value = styles[res];
+        s.style.position = "relative";
+        s.style.top = "-4.5px";
+        s.style["margin-right"] = "4px";
+        d.appendChild(d2);
+        d.appendChild(s);
+        sel.appendChild(d);
+    }
+}
+
 function updateMap() {
     switch (document.getElementsByClassName("open")[0].id) {
         case "candidateByResponse":
@@ -82,6 +107,7 @@ function updateMap() {
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 usRaphael[state].toFront();
             }
+            updateLegend();
             break;
         case "electoralCollege":
             for (var state in usRaphael) {
@@ -89,6 +115,7 @@ function updateMap() {
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 usRaphael[state].toFront();
             }
+            updateLegend();
             break;
         case "shareOfRespondents":
             var ques = document.getElementById('SORq').value;
@@ -113,6 +140,7 @@ function updateMap() {
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 usRaphael[state].toFront();
             }
+            updateLegend(rStyles);
             break;
         case "responseByCandidate":
             var ques = document.getElementById('RBCq').value;
@@ -138,6 +166,7 @@ function updateMap() {
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 usRaphael[state].toFront();
             }
+            updateLegend(rStyles);
             break;
     }
 }
@@ -174,7 +203,7 @@ function openTab(evt, tabName) {
 
 window.onload = function () {
     document.getElementById("defaultOpen").click();
-    var R = Raphael("mapContainer", 1000, 625),
+    var R = Raphael("mapContainer", 930, 625),
     attr = {
       "fill": "#d3d3d3",
       "stroke": "#fff",
