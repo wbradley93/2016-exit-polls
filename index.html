@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>2016 Presidential Exit Poll Visualizer</title>
   <style>
+    /* source: http://www.w3schools.com/howto/howto_js_tabs.asp */
     /* Style the list */
     ul.menu {
         list-style-type: none;
@@ -53,20 +54,21 @@
             Electoral College results
         </a></li>
         <li><a class="tab" onclick="openTab(event, 'candidateByResponse')">
-            Candidate by response
+            Winning candidate by response
         </a></li>
         <li><a class="tab" onclick="openTab(event, 'shareOfRespondents')">
-            Share of respondents
+            Most popular response overall
         </a></li>
         <li><a class="tab" onclick="openTab(event, 'responseByCandidate')">
-            Response by candidate
+            Most popular response by candidate
         </a></li>
     </ul>
 </div>
 
 <div id="electoralCollege" class="tabContent">
-    <a href="faq.html">About</a>
-    <a href="github.html">Source code</a>
+    <a href="#">About</a>
+    |
+    <a target="_blank" href="https://github.com/wbradley93/2016-exit-polls">Source code</a>
 </div>
 
 <div id="candidateByResponse" class="tabContent">
@@ -75,11 +77,11 @@
 </div>
 
 <div id="shareOfRespondents" class="tabContent">
-
+    Not yet implemented
 </div>
 
 <div id="responseByCandidate" class="tabContent">
-    
+    Not yet implemented
 </div>
 
 <div id="mapContainer" style="text-align: center"></div>
