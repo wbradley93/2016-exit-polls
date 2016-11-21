@@ -11,6 +11,7 @@ var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G"};
 var styles = ["#983ba8","#278098","#c87e0e","#35a029","#b64a71","#5b0cf9","#DFC541"];
 var usRaphael = {};
 var questions = [];
+var R = Raphael("mapContainer", 930, 625);
 
 function getQuestion (data, question) {
     var output = [{},{}];
@@ -176,6 +177,7 @@ function updateMap() {
             updateLegend(rStyles);
             break;
     }
+    R.safari();
 }
 
 // modified from: http://www.w3schools.com/howto/howto_js_tabs.asp
@@ -210,7 +212,6 @@ function openTab(evt, tabName) {
 
 window.onload = function () {
     document.getElementById("defaultOpen").click();
-    var R = Raphael("mapContainer", 930, 625),
     attr = {
       "fill": "#d3d3d3",
       "stroke": "#fff",
