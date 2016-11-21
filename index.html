@@ -3,49 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>2016 Presidential Exit Poll Visualizer</title>
-  <style>
-    /* source: http://www.w3schools.com/howto/howto_js_tabs.asp */
-    /* Style the list */
-    ul.menu {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        border: 1px solid #ccc;
-        background-color: #f1f1f1;
-    }
-
-    /* Float the list items side by side */
-    ul.menu li {float: left;}
-
-    /* Style the links inside the list items */
-    ul.menu li a {
-        display: inline-block;
-        color: black;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition: 0.3s;
-        font-size: 17px;
-    }
-
-    /* Change background color of links on hover */
-    ul.menu li a:hover {
-        background-color: #ddd;
-        cursor: pointer;
-    }
-
-    /* Create an active/current tablink class */
-    ul.menu li a:focus, .active {background-color: #ccc;}
-
-    /* Style the tab content */
-    .tabContent {
-        display: none;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-top: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div>
@@ -72,16 +30,17 @@
 </div>
 
 <div id="candidateByResponse" class="tabContent">
-    <select id="questionSel" onchange="getResponseOptions();updateMap()"></select>
-    <select id="responseSel" onchange="updateMap()"></select>
+    <select id="CBRq" class="questionSel" onchange="getResponseOptions();updateMap()"></select>
+    <select id="CBRr" onchange="updateMap()"></select>
 </div>
 
 <div id="shareOfRespondents" class="tabContent">
-    Not yet implemented
+    <select id="SORq" class="questionSel" onchange="updateMap()"></select>
 </div>
 
 <div id="responseByCandidate" class="tabContent">
-    Not yet implemented
+    <select id="RBCq" class="questionSel" onchange="updateMap()"></select>
+    <select id="RBCc" class="candidateSel" onchange="updateMap()"></select>
 </div>
 
 <div id="mapContainer" style="text-align: center"></div>
