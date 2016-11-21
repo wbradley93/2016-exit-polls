@@ -51,7 +51,9 @@ function styleResponses (q) {
     rStyles = {};
     arr = q.split("/");
     for (var i = 1; i < arr.length; i++) {
-        rStyles[arr[i]] = remainingColors.pop(Math.floor(Math.random()*remainingColors.length));
+        var index = Math.floor(Math.random()*remainingColors.length);
+        rStyles[arr[i]] = remainingColors[index];
+        remainingColors.splice(index, 1);
     }
     return rStyles;
 }
