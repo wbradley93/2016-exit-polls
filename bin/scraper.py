@@ -26,7 +26,7 @@ for state in states:
         candidates = []
         question = table(class_="exit-poll__question")[0].string
         for row in range(1,len(table("tr"))):
-            question += "/" + table("tr")[row].contents[0].contents[1]
+            question += '\' + table("tr")[row].contents[0].contents[1]
         data[state][question] = {}
         for candidate in table("tr")[0]:
             if candidate.has_attr("data-lname"):
@@ -43,9 +43,40 @@ for state in states:
         samples[state][question] = table(class_="exit-poll-table__metadata")[0].get_text()
 
 driver.quit()
-f = open('responses', 'w')
+f = open('full_responses.json', 'w')
 f.write(json.dumps(data))
 f.close()
-f = open('samples', 'w')
+f = open('full_samples.json', 'w')
 f.write(json.dumps(samples))
+f.close()
+
+questionCounts = {}
+questions = []
+for state in data:
+    for question in data[state]:
+        if question not in questions:
+            questions.append(question)
+            questionCounts[question] = 0
+        questionCounts[question] += 1
+        
+twentyQuestions = []
+for question in questions:
+    if questionCounts[question] >= 20:
+        twentyQuestions.append(question)
+
+twentyData = {}
+twentyCounts = {}
+for state in data:
+    twentyData[state] = {}
+    twentyCounts[state] = {}
+    for question in data[state]:
+        if question in twentyQuestions:
+            twentyData[state][question] = data[state][question]
+            twentyCounts[state][question] = samples[state][question]
+
+f = open('20state_responses.js', 'w')
+f.write("var responses = " + json.dumps(twentyData))
+f.close()
+f = open('20state_samples.js', 'w')
+f.write("var samples = " + json.dumps(twentyCounts))
 f.close()
