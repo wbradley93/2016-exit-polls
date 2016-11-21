@@ -133,7 +133,6 @@ function updateMap() {
                             maxVal = v;
                         }
                     }
-                    console.log(state + " " + maxKey);
                     if (maxVal > 0) {
                         usRaphael[state].color = rStyles[maxKey];
                     }
