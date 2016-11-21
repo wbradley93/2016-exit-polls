@@ -43,9 +43,9 @@ ul.menu li a:focus, .active {background-color: #ccc;}
 #legendContainer {
     padding: 0;
     margin: 0;
-    position: relative;
-    left: -100px;
-    top: 375px;
+    position: absolute;
+    left: 825px;
+    top: 450px;
     float: left;
     border: 2.5px solid grey;
     border-radius: 10px;
