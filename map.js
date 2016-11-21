@@ -140,8 +140,6 @@ function updateMap() {
                 usRaphael[state].toFront();
             }
             break;
-        default:
-
     }
 }
 
@@ -226,26 +224,4 @@ window.onload = function () {
         cSel.appendChild(opt);
     }
     updateMap();
-    //document.getElementById("defaultOpen").click();
-
-    //Do Work on Map
-    /*for (var state in usRaphael) {
-      usRaphael[state].color = Raphael.getColor();
-
-      (function (st, state) {
-        st[0].style.cursor = "pointer";
-        st[0].onmouseover = function () {
-          st.animate({fill: st.color}, 500);
-          st.toFront();
-          R.safari();
-        };
-        st[0].onmouseout = function () {
-          st.animate({fill: "#d3d3d3"}, 500);
-          st.toFront();
-          R.safari();
-        };
-
-      })(usRaphael[state], state);
-    } */
-
 };
