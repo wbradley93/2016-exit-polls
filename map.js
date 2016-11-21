@@ -43,6 +43,7 @@ function updateMap() {
     var res = document.getElementById('responseSel').value;
 
     for (var state in usRaphael) {
+        usRaphael[state].color = "#d3d3d3"
         if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
             var d = responses[state][ques][res];
             var maxKey = "";
@@ -54,9 +55,9 @@ function updateMap() {
                     maxVal = v;
                 }
             }
-            usRaphael[state].color = colors[maxKey];
-        } else {
-            usRaphael[state].color = "#d3d3d3";
+            if (maxVal > 0) {
+                usRaphael[state].color = colors[maxKey];
+            }
         }
         usRaphael[state].animate({fill: usRaphael[state].color}, 500);
         usRaphael[state].toFront();
