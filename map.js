@@ -89,6 +89,7 @@ window.onload = function () {
             }
         });
     });
+    questions.sort();
 
     var sel = document.getElementById('questionSel');
     for(var i = 0; i < questions.length; i++) {
