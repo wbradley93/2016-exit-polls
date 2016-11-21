@@ -1,6 +1,10 @@
 # 2016 Presidential Election Exit Poll Data
 
-Scraped from CNN's election website, including all 28 states with sufficient polling data and national totals under 'state' `National`. Response data in `full_responses.json` consist of nested JSON objects structured as follows:
+See a live visualization [here](https://wbradley93.github.io/2016-exit-polls/). Outlets in the national pool only released so many angles at the data, and Edison charges an ungodly amount for the raw numbers, so I tried to make the next best thing.
+
+Credit to [robflaherty's Raphael US map](https://github.com/robflaherty/us-map-raphael) for making drawing the map a breeze. Files with names beginning `bin/20state_` contain only questions asked in at least 20 states (this is the data used in the live demo).
+
+Data was scraped from CNN's election website, including all 28 states with sufficient polling data and national totals under the 'state' `National`. Full response data in `bin/full_responses.json` consist of nested JSON objects structured as follows:
 
 ```
 {
@@ -27,7 +31,7 @@ Scraped from CNN's election website, including all 28 states with sufficient pol
 }
 ```
 
-Sample size data in `full_samples.json` consist of nested JSON objects structured as follows:
+Sample size data in `bin/full_samples.json` consist of nested JSON objects structured as follows:
 
 ```
 {
@@ -40,5 +44,3 @@ Sample size data in `full_samples.json` consist of nested JSON objects structure
   ...
 }
 ```
-
-Files with names beginning `20state_` contain only questions asked in at least 20 states. Credit to robflaherty's Raphael US map for that.

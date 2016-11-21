@@ -56,7 +56,6 @@ function styleResponses (q) {
     return rStyles;
 }
 
-document.getElementById("defaultOpen").click();
 function updateMap() {
     switch (document.getElementsByClassName("open")[0].id) {
         case "candidateByResponse":
@@ -174,6 +173,7 @@ function openTab(evt, tabName) {
 }
 
 window.onload = function () {
+    document.getElementById("defaultOpen").click();
     var R = Raphael("mapContainer", 1000, 625),
     attr = {
       "fill": "#d3d3d3",
