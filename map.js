@@ -4,6 +4,7 @@
  *  Last Modified: 22 Nov 2016
  *  Included elsewhere: var responses, samples
  *  TODO: mouseover infobox, and there must be streamlining/optimizing potential
+ *      eg abstracting entire pallate/pattern/fill process - updateMap is a monster
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
@@ -12,7 +13,6 @@ var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G"};
 var styles = ["#1f78b4","#33a02c","#fb9a99","#e31a1c","#ff7f00", "#000000", "#984ea3"];
 var usRaphael = {};
 var usMasks = {};
-var questions = [];
 var R = Snap(930, 588);
 
 function getQuestion (data, question) {
@@ -72,6 +72,7 @@ function updateLegend (styles = {"Trump":"#ea1919", "Clinton":"#001dff", "Johnso
         sel.removeChild(sel.lastChild);
     }
     for (res in styles) {
+        //condense these into single lines?
         var d = document.createElement('div');
         var d2 = document.createElement('div');
         d2.style["background-color"] = styles[res];
@@ -129,7 +130,7 @@ function updateMap() {
                         } else if (typeof(maxKey) == "object") {
                             var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: colors[maxKey[0]], fill: colors[maxKey[0]], strokeWidth: 3})
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usRaphael[state].attr({fill: colors[maxKey[1]]});
+                            usRaphael[state].animate({fill: colors[maxKey[1]]}, 500);
                         } else {
                             console.log(maxKey);
                             throw "color fill error";
@@ -146,6 +147,12 @@ function updateMap() {
                 clearState(state)
                 usRaphael[state].color = colors[electoralCollege[state]]
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
+                usRaphael[state].onmouseover = function() {
+
+                }
+                usRaphael[state].onmouseout = function() {
+
+                }
             }
             updateLegend();
             break;
@@ -175,9 +182,9 @@ function updateMap() {
                             usRaphael[state].color = rStyles[maxKey];
                             usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                         } else if (typeof(maxKey) == "object") {
-                            var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3})
+                            var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3});
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usRaphael[state].attr({fill: rStyles[maxKey[1]]});
+                            usRaphael[state].animate({fill: rStyles[maxKey[1]]}, 500);
                         } else {
                             throw "color fill error";
                         }
@@ -217,7 +224,7 @@ function updateMap() {
                         } else if (typeof(maxKey) == "object") {
                             var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3})
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usRaphael[state].attr({fill: rStyles[maxKey[1]]});
+                            usRaphael[state].animate({fill: rStyles[maxKey[1]]}, 500);
                         } else {
                             throw "color fill error";
                         }
@@ -235,23 +242,18 @@ function updateMap() {
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 // Get the modal
 var modal = document.getElementById('myModal');
-
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
-
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
 // When the user clicks on the button, open the modal
 btn.onclick = function() {
     modal.style.display = "block";
 }
-
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -263,24 +265,20 @@ window.onclick = function(event) {
 function openTab(evt, tabName) {
     // Declare all variables
     var i, tabcontent, tablinks;
-
     if (document.getElementsByClassName("open").length > 0) {
         document.getElementsByClassName("open")[0].className =
             document.getElementsByClassName("open")[0].className.replace(" open", "");
     }
-
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabContent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-
     // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tab");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-
     // Show the current tab, and add an "active" class to the link that opened the tab
     document.getElementById(tabName).style.display = "block";
     document.getElementById(tabName).className += " open";
@@ -306,14 +304,14 @@ window.onload = function () {
       usMasks[state] = R.path(usMap[state]).attr({fill: "none"});
     }
 
-    Object.keys(responses).forEach(function (state) {
+    /*Object.keys(responses).forEach(function (state) {
         Object.keys(responses[state]).forEach(function (question) {
             if (questions.indexOf(question) == -1) {
                 questions.push(question);
             }
         });
     });
-    questions.sort();
+    questions.sort();*/
 
     var qSel = document.getElementsByClassName('questionSel');
     for (var i = 0; i < questions.length; i++) {

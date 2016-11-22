@@ -84,6 +84,7 @@ for state in data:
             questions[question] += 1
 
 #preserve the ones with enough data to be interesting
+twentyQuestions = []
 twentyData = {}
 twentyCounts = {}
 for state in data:
@@ -91,12 +92,13 @@ for state in data:
     twentyCounts[state] = {}
     for question in data[state]:
         if questions[question] >= 20:
+            twentyQuestions.append(question)
             twentyData[state][question] = data[state][question]
             twentyCounts[state][question] = samples[state][question]
+twentyQuestions.sort()
 
-f = open('20state_responses.js', 'w')
-f.write("var responses = " + json.dumps(twentyData))
-f.close()
-f = open('20state_samples.js', 'w')
-f.write("var samples = " + json.dumps(twentyCounts))
+f = open('20states.js', 'w')
+f.write("var responses = " + json.dumps(twentyData) + "\n")
+f.write("var samples = " + json.dumps(twentyCounts) + "\n")
+f.write("var questions = " + json.dumps(twentyQuestions))
 f.close()
