@@ -3,6 +3,7 @@
  *  Author: Wes Bradley
  *  Last Modified: 21 Nov 2016
  *  Included elsewhere: var responses, samples
+ *  TODO: mouseover infobox, and there must be some streamlining/optimizing potential
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
@@ -105,20 +106,38 @@ function updateMap() {
                 clearState(state)
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques][res];
-                    var maxKey = "";
+                    var maxKey = "g";
                     var maxVal = 0;
                     for (var elt in d) {
                         var v = getIntVal(d[elt])
-                        if (elt != "percent" && v >= maxVal) {
-                            maxKey = elt;
-                            maxVal = v;
+                        if (elt != "percent") {
+                            if (v > maxVal) {
+                                maxKey = elt;
+                                maxVal = v;
+                            } else if (v == maxVal) {
+                                if (typeof(maxKey) == "string") {
+                                    maxKey = [maxKey];
+                                }
+                                maxKey.push(elt);
+                            }
                         }
                     }
                     if (maxVal > 0) {
-                        usRaphael[state].color = colors[maxKey];
+                        if (typeof(maxKey) == "string") {
+                            usRaphael[state].color = colors[maxKey];
+                            usRaphael[state].animate({fill: usRaphael[state].color}, 500);
+                        } else if (typeof(maxKey) == "object") {
+                            var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: colors[maxKey[0]], fill: colors[maxKey[0]], strokeWidth: 3})
+                            usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
+                            usRaphael[state].attr({fill: colors[maxKey[1]]});
+                        } else {
+                            console.log(maxKey);
+                            throw "color fill error";
+                        }
                     }
+                } else {
+                    usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 }
-                usRaphael[state].animate({fill: usRaphael[state].color}, 500);
             }
             updateLegend();
             break;
