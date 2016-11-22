@@ -24,7 +24,10 @@
 </div>
 
 <div id="electoralCollege" class="tabContent" style="padding-top: 7px">
-    <a target="_blank" href="https://github.com/wbradley93/2016-exit-polls" style="position: relative; left: 46.5%">Github repo</a>
+    <span style="position: relative; left: 46%">
+        <a href="#" id="myBtn">FAQ</a> |
+        <a target="_blank" href="https://github.com/wbradley93/2016-exit-polls" >Github repo</a>
+    </span>
 </div>
 
 <div id="candidateByResponse" class="tabContent">
@@ -39,6 +42,18 @@
 <div id="responseByCandidate" class="tabContent">
     <select id="RBCq" class="questionSel" onchange="updateMap()"></select>
     <select id="RBCc" class="candidateSel" onchange="updateMap()"></select>
+</div>
+
+<!-- source: http://www.w3schools.com/howto/howto_css_modals.asp -->
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span>
+    <img src="example_table.png"/>
+  </div>
+
 </div>
 
 <div id="mapContainer" style="float: left"></div>
