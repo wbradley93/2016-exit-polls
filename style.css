@@ -72,7 +72,7 @@ ul.menu li a:focus, .active {background-color: #ccc;}
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 45%; /* Could be more or less, depending on screen size */
+    width: 550px; /* Could be more or less, depending on screen size */
 }
 
 .modal-content img {
