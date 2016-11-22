@@ -8,10 +8,11 @@
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
 var colors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"}
 var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G"};
-var styles = ["#983ba8","#278098","#c87e0e","#35a029","#b64a71","#5b0cf9","#DFC541"];
+var styles = ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6"];
 var usRaphael = {};
+var usMasks = {};
 var questions = [];
-var R = Raphael("mapContainer", 930, 625);
+var R = Snap(930, 588);
 
 function getQuestion (data, question) {
     var output = [{},{}];
@@ -89,6 +90,11 @@ function updateLegend (styles = {"Trump":"#ea1919", "Clinton":"#001dff", "Johnso
     }
 }
 
+function clearState(state) {
+    usRaphael[state].color = "#d3d3d3";
+    usMasks[state].attr({fill: "none"});
+}
+
 function updateMap() {
     switch (document.getElementsByClassName("open")[0].id) {
         case "candidateByResponse":
@@ -96,7 +102,7 @@ function updateMap() {
             var res = document.getElementById('CBRr').value;
 
             for (var state in usRaphael) {
-                usRaphael[state].color = "#d3d3d3"
+                clearState(state)
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques][res];
                     var maxKey = "";
@@ -113,15 +119,14 @@ function updateMap() {
                     }
                 }
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
-                usRaphael[state].toFront();
             }
             updateLegend();
             break;
         case "electoralCollege":
             for (var state in usRaphael) {
+                clearState(state)
                 usRaphael[state].color = colors[electoralCollege[state]]
                 usRaphael[state].animate({fill: usRaphael[state].color}, 500);
-                usRaphael[state].toFront();
             }
             updateLegend();
             break;
@@ -129,24 +134,38 @@ function updateMap() {
             var ques = document.getElementById('SORq').value;
             var rStyles = styleResponses(ques);
             for (var state in usRaphael) {
-                usRaphael[state].color = "#d3d3d3"
+                clearState(state)
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques];
                     var maxKey = "";
                     var maxVal = 0
                     for (var ans in d) {
-                        v = getIntVal(d[ans]["percent"])
-                        if (v >= maxVal) {
+                        var v = getIntVal(d[ans]["percent"])
+                        if (v > maxVal) {
                             maxKey = ans;
                             maxVal = v;
+                        } else if (v == maxVal) {
+                            if (typeof(maxKey) == "string") {
+                                maxKey = [maxKey];
+                            }
+                            maxKey.push(ans);
                         }
                     }
                     if (maxVal > 0) {
-                        usRaphael[state].color = rStyles[maxKey];
+                        if (typeof(maxKey) == "string") {
+                            usRaphael[state].color = rStyles[maxKey];
+                            usRaphael[state].animate({fill: usRaphael[state].color}, 500);
+                        } else if (typeof(maxKey) == "object") {
+                            var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3})
+                            usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
+                            usRaphael[state].attr({fill: rStyles[maxKey[1]]});
+                        } else {
+                            throw "color fill error";
+                        }
                     }
+                } else {
+                    usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 }
-                usRaphael[state].animate({fill: usRaphael[state].color}, 500);
-                usRaphael[state].toFront();
             }
             updateLegend(rStyles);
             break;
@@ -155,24 +174,38 @@ function updateMap() {
             var cand = document.getElementById('RBCc').value;
             var rStyles = styleResponses(ques);
             for (var state in usRaphael) {
-                usRaphael[state].color = "#d3d3d3"
+                clearState(state)
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques];
                     var maxKey = "";
                     var maxVal = 0
                     for (var ans in d) {
                         v = getIntVal(d[ans][cand])
-                        if (v >= maxVal) {
+                        if (v > maxVal) {
                             maxKey = ans;
                             maxVal = v;
+                        } else if (v == maxVal) {
+                            if (typeof(maxKey) == "string") {
+                                maxKey = [maxKey];
+                            }
+                            maxKey.push(ans);
                         }
                     }
                     if (maxVal > 0) {
-                        usRaphael[state].color = rStyles[maxKey];
+                        if (typeof(maxKey) == "string") {
+                            usRaphael[state].color = rStyles[maxKey];
+                            usRaphael[state].animate({fill: usRaphael[state].color}, 500);
+                        } else if (typeof(maxKey) == "object") {
+                            var pat = R.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3})
+                            usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
+                            usRaphael[state].attr({fill: rStyles[maxKey[1]]});
+                        } else {
+                            throw "color fill error";
+                        }
                     }
+                } else {
+                    usRaphael[state].animate({fill: usRaphael[state].color}, 500);
                 }
-                usRaphael[state].animate({fill: usRaphael[state].color}, 500);
-                usRaphael[state].toFront();
             }
             updateLegend(rStyles);
             break;
@@ -222,7 +255,6 @@ function openTab(evt, tabName) {
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-    //document.getElementsByClassName("open")[0].className = "tabContent"
 
     // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tab");
@@ -252,6 +284,7 @@ window.onload = function () {
     //Draw Map and store Raphael paths
     for (var state in usMap) {
       usRaphael[state] = R.path(usMap[state]).attr(attr);
+      usMasks[state] = R.path(usMap[state]).attr({fill: "none"});
     }
 
     Object.keys(responses).forEach(function (state) {
