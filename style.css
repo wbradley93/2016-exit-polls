@@ -45,6 +45,15 @@ ul.menu li a:hover {
 /* Create an active/current tablink class */
 ul.menu li a:focus, .active {background-color: #ccc;}
 
+#electoralCollege {
+     padding-top: 7px;
+}
+
+#electoralCollege span {
+     position: relative;
+     left: 415px;
+}
+
 /* Style the tab content */
 .tab-content {
     display: none;
@@ -69,6 +78,10 @@ div.legend-content {
     float: left;
     border: 2.5px solid grey;
     border-radius: 10px;
+}
+
+.legend-content h4 {
+     margin: 3px 5px;
 }
 
 div.infobox-container {

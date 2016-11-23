@@ -3,15 +3,11 @@
  *  Author: Wes Bradley
  *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples, questions
- *  TODO: finish mouseover infobox,
- *      fix style inconsistencies ('/"),
- *      document updateMap and getSet,
+ *  TODO: fix style inconsistencies ('/"),
+ *      document updateMap, createMouseoverHandlers and getSet,
  *      rename ambiguous variables,
- *      transfer styles from html to css,
- *      make maxKey object the norm,
- *      stop checking its type and just deal with second element if its there,
- *      deal with johnson/stein not being choices in some wcr questions,
- *      deal with infobox going off screen
+ *      make maxKey object by default; stop checking its type and deal with second element if its there,
+ *      deal with infobox going off screen (enforce max x,y vals, defined in terms of infobox width/height),
  *      find slow computers to test on
  ************************************/
 
@@ -127,7 +123,6 @@ function updateLegend (styles) {
     }
 }
 
-// *********************** mouseover stuff ************************
 function createMouseoverHandlers (state, ques, maxKey, data, styles) {
     if (typeof(maxKey) == "string") {
         var s = usSnap[state];
@@ -149,7 +144,12 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles) {
                     d2 = document.createElement('div'),
                     s = document.createElement('span');
                 d2.style.cssText = "height:20px;width:20px;display:inline-block;margin:0 5px;background-color:"+styles[res]+";";
-                s.innerHTML = res + ": " + (data[res] || 0) + "%";
+                if (data.hasOwnProperty(res)) {
+                    var da = data[res] + "%";
+                } else {
+                    var da = "N/A";
+                }
+                s.innerHTML = res + ": " + da;
                 s.value = styles[res];
                 s.style.cssText = "position:relative;top:-4.5px;margin-right:4px;";
                 d.appendChild(d2);
@@ -172,7 +172,6 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles) {
         st.hover(mouseEnter, mouseLeave);
     })(state, ques, maxKey, data, styles, s);
 }
-// *********************** mouseover stuff ************************
 
 function getSet (ques, sel) {
     if (Object.values(candidates).indexOf(sel) > -1 || sel == "percent") {
