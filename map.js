@@ -3,18 +3,18 @@
  *  Author: Wes Bradley
  *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples, questions
- *  TODO: finish mouseover infobox, clean up redundancies/naming styles,
- *      consolidate getRow/getCol
+ *  TODO: finish mouseover infobox, fix style inconsistencies ('/", naming across files)
  ************************************/
 
-var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
-var partyColors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"}
-var candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G", "Other/No Answer":"O"};
-var styles = ["#1f78b4","#33a02c","#fb9a99","#e31a1c","#ff7f00", "#000000", "#984ea3"];
-var usSnap = {};
-var usMasks = {};
-var S = Snap(930, 588);
+var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"},
+    partyColors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"},
+    candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G", "Other/No Answer":"O"},
+    styles = ["#1f78b4","#33a02c","#fb9a99","#e31a1c","#ff7f00", "#000000", "#984ea3"],
+    usSnap = {},
+    usMasks = {},
+    S = Snap(930, 588);
 
+//necessary anymore?
 function getQuestion (data, question) {
     var output = [{},{}];
     Object.keys(data).forEach(function (state) {
@@ -32,8 +32,8 @@ function getResponseOptions () {
     while (sel.lastChild) {
         sel.removeChild(sel.lastChild);
     }
-    //get question\\response string, parse responses, repopulate list
-    opts = document.getElementById('CBRq').value.split("\\");
+    //get "question\\response" string, parse responses, repopulate list
+    var opts = document.getElementById('CBRq').value.split("\\");
     for (var i = 1; i < opts.length; i++) {
         var opt = document.createElement('option');
         opt.innerHTML = opts[i];
@@ -58,10 +58,10 @@ function getIntVal (str) {
 }
 
 function styleResponses (q) {
-    //takes question\\responses string, returns object of responses:colors
-    remainingColors = styles.slice(0);
-    rStyles = {};
-    arr = q.split("\\");
+    //takes "question\\responses" string, returns object of responses:colors
+    var remainingColors = styles.slice(0),
+        rStyles = {},
+        arr = q.split("\\");
     for (var i = 1; i < arr.length; i++) {
         var index = Math.floor(Math.random()*remainingColors.length);
         rStyles[arr[i]] = remainingColors[index];
@@ -70,11 +70,11 @@ function styleResponses (q) {
     return rStyles;
 }
 
-function updateLegend (styles = "") {
+function updateLegend (styles) {
     //use party colors if no style provided
     if (!styles) {
-        styles = {};
-        for (candidate in candidates) {
+        var styles = {};
+        for (var candidate in candidates) {
             styles[candidate] = partyColors[candidates[candidate]];
         }
     }
@@ -84,11 +84,11 @@ function updateLegend (styles = "") {
         sel.removeChild(sel.lastChild);
     }
     // populate with container div, color key div, and label
-    for (res in styles) {
-        var d = document.createElement('div');
-        var d2 = document.createElement('div');
+    for (var res in styles) {
+        var d = document.createElement('div'),
+            d2 = document.createElement('div'),
+            s = document.createElement('span');
         d2.style.cssText = "height:20px;width:20px;display:inline-block;margin:0 5px;background-color:"+styles[res]+";";
-        var s = document.createElement('span');
         s.innerHTML = res;
         s.value = styles[res];
         s.style.cssText = "position:relative;top:-4.5px;margin-right:4px;";
@@ -137,17 +137,25 @@ function fillState (state, maxKey, style) {
     }
 }
 
-function getCol (ques, col) {
-    var rStyles = styleResponses(ques);
+function getSet (ques, sel) {
+    if (Object.values(candidates).indexOf(sel) > -1 || sel == "percent") {
+        var col = sel,
+            styles = styleResponses(ques);
+    } else {
+        var res = sel;
+    }
     for (var state in usSnap) {
         clearState(state)
         if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
-            var d = responses[state][ques];
-            var maxKey = "";
-            var maxVal = 0;
-            var r = {};
+            var d = responses[state][ques][res] || responses[state][ques],
+                maxKey = "",
+                maxVal = 0,
+                r = {};
             for (var ans in d) {
-                var v = getIntVal(d[ans][col])
+                if (!col && ans == "percent") {
+                    continue;
+                }
+                var v = getIntVal(d[ans][col] || d[ans]);
                 r[ans] = v;
                 if (v > maxVal) {
                     maxKey = ans;
@@ -159,45 +167,13 @@ function getCol (ques, col) {
                     maxKey.push(ans);
                 }
             }
-            createMouseoverHandlers(state,maxKey,r,rStyles);
             if (maxVal > 0) {
-                fillState(state, maxKey, rStyles);
+                createMouseoverHandlers(state, maxKey, r, styles || partyColors);
+                fillState(state, maxKey, styles || partyColors);
             }
         }
     }
-    updateLegend(rStyles);
-}
-
-function getRow (ques, res) {
-    for (var state in usSnap) {
-        clearState(state)
-        if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
-            var d = responses[state][ques][res];
-            var maxKey = "g";
-            var maxVal = 0;
-            var r = {};
-            for (var ans in d) {
-                if (ans != "percent") {
-                    var v = getIntVal(d[ans])
-                    r[ans] = v;
-                    if (v > maxVal) {
-                        maxKey = ans;
-                        maxVal = v;
-                    } else if (v == maxVal) {
-                        if (typeof(maxKey) == "string") {
-                            maxKey = [maxKey];
-                        }
-                        maxKey.push(ans);
-                    }
-                }
-            }
-            createMouseoverHandlers(state,maxKey,r,partyColors);
-            if (maxVal > 0) {
-                fillState(state, maxKey, partyColors);
-            }
-        }
-    }
-    updateLegend();
+    updateLegend(styles);
 }
 
 function refillMap() {
@@ -209,26 +185,27 @@ function refillMap() {
 function updateMap() {
     switch (document.getElementsByClassName("open")[0].id) {
         case "candidateByResponse":
-            var ques = document.getElementById('CBRq').value;
-            var res = document.getElementById('CBRr').value;
-            getRow(ques, res);
+            var ques = document.getElementById('CBRq').value,
+                res = document.getElementById('CBRr').value;
+            getSet(ques, res);
             break;
         case "electoralCollege":
             for (var state in usSnap) {
-                clearState(state)
-                usSnap[state].color = partyColors[electoralCollege[state]]
-                usSnap[state].animate({fill: usSnap[state].color}, 500);
+                clearState(state);
+                var st = usSnap[state];
+                st.color = partyColors[electoralCollege[state]];
+                st.animate({fill: usSnap[state].color}, 500);
             }
             updateLegend();
             break;
         case "shareOfRespondents":
             var ques = document.getElementById('SORq').value;
-            getCol(ques, "percent");
+            getSet(ques, "percent");
             break;
         case "responseByCandidate":
-            var ques = document.getElementById('RBCq').value;
-            var cand = document.getElementById('RBCc').value;
-            getCol(ques, cand);
+            var ques = document.getElementById('RBCq').value,
+                cand = document.getElementById('RBCc').value;
+            getSet(ques, cand);
             break;
     }
     refillMap();
@@ -265,12 +242,12 @@ function openTab(evt, tabName) {
     }
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabContent");
-    for (i = 0; i < tabcontent.length; i++) {
+    for (var i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
     // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tab");
-    for (i = 0; i < tablinks.length; i++) {
+    for (var i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     // Show the current tab, and add an "active" class to the link that opened the tab
@@ -302,24 +279,24 @@ window.onload = function () {
     // collect questions, parse to remove responses, append to question select div
     var qSel = document.getElementsByClassName('questionSel');
     for (var i = 0; i < questions.length; i++) {
-        var opt = document.createElement('option');
-        s = questions[i].split("\\");
+        var opt = document.createElement('option'),
+            s = questions[i].split("\\");
         opt.innerHTML = s[0] + " (" + s[1];
-        for (var j = 2; j < s.length; j++){
+        for (var j = 2; j < s.length; j++) {
             opt.innerHTML = opt.innerHTML + ", " + s[j];
         }
         opt.innerHTML = opt.innerHTML + ")";
         opt.value = questions[i];
         qSel[0].appendChild(opt);
     }
-    for (var j = 1; j < qSel.length; j++){
+    for (var j = 1; j < qSel.length; j++) {
         qSel[j].innerHTML = qSel[0].innerHTML;
     }
     getResponseOptions();
 
     //build list of candidates, append to candidate select div
     var cSel = document.getElementById('RBCc');
-    for (candidate in candidates){
+    for (var candidate in candidates) {
         var opt = document.createElement('option');
         opt.innerHTML = candidate;
         opt.value = candidates[candidate];
