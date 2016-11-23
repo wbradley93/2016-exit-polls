@@ -1,10 +1,11 @@
 /************************************
  *  2016 Exit Poll Data Visualizer
  *  Author: Wes Bradley
- *  Last Modified: 22 Nov 2016
+ *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples
- *  TODO: mouseover infobox, and there must be streamlining/optimizing potential
- *      eg abstracting entire pallate/pattern/fill process - updateMap is a monster
+ *  TODO: mouseover infobox, clean up redundancies, and there must be
+ *  streamlining/optimizing potential, eg abstracting entire pallate/pattern/fill
+ *  process - updateMap is a monster
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"};
@@ -98,16 +99,14 @@ function enterFunction () {
 }
 
 function leaveFunction () {
-    console.log(this.parentNode);
+    console.log(this);
 }
 
 function clearState(state) {
     usSnap[state].color = "#d3d3d3";
     usMasks[state].attr({fill: "none"});
-    /*usSnap[state].node.unmouseover=(enterFunction);
-    usSnap[state].node.unmouseout=(leaveFunction);
-    usMasks[state].node.unmouseover=(this.onmouseover);
-    usMasks[state].node.unmouseout=(this.onmouseout);*/
+    usSnap[state].unhover(enterFunction, leaveFunction);
+    usMasks[state].unhover(enterFunction, leaveFunction);
 }
 
 function createMouseoverHandlers (state, maxKey, data, styles) {
@@ -116,8 +115,7 @@ function createMouseoverHandlers (state, maxKey, data, styles) {
     } else if (typeof(maxKey) == "object") {
         var s = usMasks[state];
     }
-    /*s.node.onmouseover = (enterFunction);
-    s.node.onmouseout = (leaveFunction);*/
+    s.hover(enterFunction, leaveFunction);
 }
 //end abstracted functions
 
@@ -133,20 +131,23 @@ function updateMap() {
                     var d = responses[state][ques][res];
                     var maxKey = "g";
                     var maxVal = 0;
-                    for (var elt in d) {
-                        var v = getIntVal(d[elt])
-                        if (elt != "percent") {
+                    var r = {};
+                    for (var ans in d) {
+                        var v = getIntVal(d[ans])
+                        r[ans] = v;
+                        if (ans != "percent") {
                             if (v > maxVal) {
-                                maxKey = elt;
+                                maxKey = ans;
                                 maxVal = v;
                             } else if (v == maxVal) {
                                 if (typeof(maxKey) == "string") {
                                     maxKey = [maxKey];
                                 }
-                                maxKey.push(elt);
+                                maxKey.push(ans);
                             }
                         }
                     }
+                    createMouseoverHandlers(state,maxKey,r,rStyles);
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = partyColors[maxKey];
@@ -155,8 +156,7 @@ function updateMap() {
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
                             usSnap[state].color = partyColors[maxKey[1]];
                         } else {
-                            console.log(maxKey);
-                            throw "color fill error";
+                            throw "color fill error " + maxKey;
                         }
                     }
                 }
@@ -180,6 +180,7 @@ function updateMap() {
                     var maxKey = "";
                     var maxVal = 0;
                     var r = {};
+                    var r = {};
                     for (var ans in d) {
                         var v = getIntVal(d[ans]["percent"])
                         r[ans] = v;
@@ -198,15 +199,11 @@ function updateMap() {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = rStyles[maxKey];
                         } else if (typeof(maxKey) == "object") {
-                            console.log(maxKey);
                             var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3});
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
                             usSnap[state].color = rStyles[maxKey[1]];
-                            if (state = "Utah") {
-                                console.log(usSnap[state].color);
-                            }
                         } else {
-                            throw "color fill error";
+                            throw "color fill error " + maxKey;
                         }
                     }
                 }
@@ -237,6 +234,7 @@ function updateMap() {
                             maxKey.push(ans);
                         }
                     }
+                    createMouseoverHandlers(state,maxKey,r,rStyles);
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = rStyles[maxKey];
@@ -245,7 +243,7 @@ function updateMap() {
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
                             usSnap[state].color = rStyles[maxKey[1]];
                         } else {
-                            throw "color fill error";
+                            throw "color fill error " + maxKey;
                         }
                     }
                 }
