@@ -3,13 +3,14 @@
  *  Author: Wes Bradley
  *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples, questions
- *  TODO: finish mouseover infobox, fix style inconsistencies ('/", naming across files)
+ *  TODO: finish mouseover infobox, move functions back into window.onload to
+ *      avoid using globals?, fix style inconsistencies ('/", naming across files)
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"},
     partyColors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"},
     candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G", "Other/No Answer":"O"},
-    styles = ["#1f78b4","#33a02c","#fb9a99","#e31a1c","#ff7f00", "#000000", "#984ea3"],
+    styles = ["#cb0028","#2b4ab2","#e68100","#a1069e","#989100","#b5adff","#7c3e60"],
     usSnap = {},
     usMasks = {},
     S = Snap(930, 588);
