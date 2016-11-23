@@ -4,7 +4,7 @@
  *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples, questions
  *  TODO: finish mouseover infobox, move functions back into window.onload to
- *      avoid using globals?, fix style inconsistencies ('/", naming across files)
+ *      avoid using globals?, fix style inconsistencies ('/", naming conventions across files)
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"},
@@ -242,7 +242,7 @@ function openTab(evt, tabName) {
         o[0].className = o[0].className.replace(" open", "");
     }
     // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabContent");
+    tabcontent = document.getElementsByClassName("tab-content");
     for (var i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
@@ -278,7 +278,7 @@ window.onload = function () {
     }
 
     // collect questions, parse to remove responses, append to question select div
-    var qSel = document.getElementsByClassName('questionSel');
+    var qSel = document.getElementsByClassName('question-sel');
     for (var i = 0; i < questions.length; i++) {
         var opt = document.createElement('option'),
             s = questions[i].split("\\");
