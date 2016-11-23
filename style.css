@@ -1,16 +1,29 @@
-/* source: http://www.w3schools.com/howto/howto_js_tabs.asp */
+body {
+    width: 1000px;
+    margin: auto;
+}
+
+/* modified from: http://www.w3schools.com/howto/howto_js_tabs.asp */
+div.menuContainer {
+    width: 100%;
+    text-align: center;
+}
+
 /* Style the list */
 ul.menu {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
 }
 
 /* Float the list items side by side */
-ul.menu li {float: left;}
+ul.menu li {
+    display: inline;
+    text-align: center;
+}
 
 /* Style the links inside the list items */
 ul.menu li a {
@@ -40,12 +53,19 @@ ul.menu li a:focus, .active {background-color: #ccc;}
     border-top: none;
 }
 
-#legendContainer {
+div.legendContainer {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+div.legendContent {
     padding: 0;
     margin: 0;
-    position: absolute;
-    left: 825px;
-    top: 450px;
+    position: relative;
+    left: 815px;
+    top: 365px;
     float: left;
     border: 2.5px solid grey;
     border-radius: 10px;

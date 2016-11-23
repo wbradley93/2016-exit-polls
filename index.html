@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div>
+    <div class="menuContainer">
         <ul class="menu">
             <li><a id="defaultOpen" class="tab" onclick="openTab(event, 'electoralCollege')">
                 Electoral College results
@@ -55,11 +55,12 @@
       </div>
     </div>
 
-    <div id="legendContainer">
-        <h4 style="margin: 3px 5px">Legend:</h4>
-        <div id="legendKey"></div>
+    <div class="legendContainer">
+        <div class="legendContent">
+            <h4 style="margin: 3px 5px">Legend:</h4>
+            <div id="legendKey"></div>
+        </div>
     </div>
-    <!-- /container -->
 
     <script src="snap.svg-min.js"></script>
     <script src="us-map-svg.js"></script>
