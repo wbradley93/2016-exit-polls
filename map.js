@@ -93,9 +93,31 @@ function updateLegend (styles = {"Trump":"#ea1919", "Clinton":"#001dff", "Johnso
     }
 }
 
+function enterFunction () {
+    console.log(this);
+}
+
+function leaveFunction () {
+    console.log(this.parentNode);
+}
+
 function clearState(state) {
     usSnap[state].color = "#d3d3d3";
     usMasks[state].attr({fill: "none"});
+    /*usSnap[state].node.unmouseover=(enterFunction);
+    usSnap[state].node.unmouseout=(leaveFunction);
+    usMasks[state].node.unmouseover=(this.onmouseover);
+    usMasks[state].node.unmouseout=(this.onmouseout);*/
+}
+
+function createMouseoverHandlers (state, maxKey, data, styles) {
+    if (typeof(maxKey) == "string") {
+        var s = usSnap[state];
+    } else if (typeof(maxKey) == "object") {
+        var s = usMasks[state];
+    }
+    /*s.node.onmouseover = (enterFunction);
+    s.node.onmouseout = (leaveFunction);*/
 }
 //end abstracted functions
 
@@ -156,9 +178,11 @@ function updateMap() {
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques];
                     var maxKey = "";
-                    var maxVal = 0
+                    var maxVal = 0;
+                    var r = {};
                     for (var ans in d) {
                         var v = getIntVal(d[ans]["percent"])
+                        r[ans] = v;
                         if (v > maxVal) {
                             maxKey = ans;
                             maxVal = v;
@@ -169,13 +193,18 @@ function updateMap() {
                             maxKey.push(ans);
                         }
                     }
+                    createMouseoverHandlers(state,maxKey,r,rStyles);
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = rStyles[maxKey];
                         } else if (typeof(maxKey) == "object") {
+                            console.log(maxKey);
                             var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3});
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usSnap[state].color = partyColors[maxKey[1]];
+                            usSnap[state].color = rStyles[maxKey[1]];
+                            if (state = "Utah") {
+                                console.log(usSnap[state].color);
+                            }
                         } else {
                             throw "color fill error";
                         }
@@ -196,7 +225,7 @@ function updateMap() {
                     var maxVal = 0;
                     var r = {};
                     for (var ans in d) {
-                        v = getIntVal(d[ans][cand])
+                        v = getIntVal(d[ans][cand]);
                         r[ans] = v;
                         if (v > maxVal) {
                             maxKey = ans;
@@ -292,7 +321,8 @@ window.onload = function () {
     //Draw Map and store Snap paths
     for (var state in usMap) {
       usSnap[state] = S.path(usMap[state]).attr(attr);
-      usMasks[state] = S.path(usMap[state]).attr({fill: "none"});
+      usSnap[state].attr({"stateID": state});
+      usMasks[state] = S.path(usMap[state]).attr({fill: "none", "stateID": state});
     }
 
     var qSel = document.getElementsByClassName('questionSel');
