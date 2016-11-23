@@ -71,7 +71,33 @@ div.legend-content {
     border-radius: 10px;
 }
 
-/* source: http://www.w3schools.com/howto/howto_css_modals.asp */
+div.infobox-container {
+    height: 0;
+    margin: 0;
+    position: absolute;
+}
+
+div.infobox-content {
+    display: none;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    float: left;
+    background-color: #fefefe;
+    border: 2.5px solid grey;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.infobox-content h4 {
+    margin: 3px 5px;
+}
+
+.infobox-content span {
+    margin: 0 5px;
+}
+
+/* modified from: http://www.w3schools.com/howto/howto_css_modals.asp */
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */

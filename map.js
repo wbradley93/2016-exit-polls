@@ -3,13 +3,21 @@
  *  Author: Wes Bradley
  *  Last Modified: 23 Nov 2016
  *  Included elsewhere: var responses, samples, questions
- *  TODO: finish mouseover infobox, move functions back into window.onload to
- *      avoid using globals?, fix style inconsistencies ('/", naming conventions across files)
+ *  TODO: finish mouseover infobox,
+ *      fix style inconsistencies ('/"),
+ *      document updateMap and getSet,
+ *      rename ambiguous variables,
+ *      transfer styles from html to css,
+ *      make maxKey object the norm,
+ *      stop checking its type and just deal with second element if its there,
+ *      deal with johnson/stein not being choices in some wcr questions,
+ *      deal with infobox going off screen
+ *      find slow computers to test on
  ************************************/
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"},
-    partyColors = {"R":"#ea1919", "D":"#001dff", "G":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"},
-    candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"G", "Other/No Answer":"O"},
+    partyColors = {"R":"#ea1919", "D":"#001dff", "GR":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"},
+    candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"GR", "Other/No Answer":"O"},
     styles = ["#cb0028","#2b4ab2","#e68100","#a1069e","#989100","#b5adff","#7c3e60"],
     usSnap = {},
     usMasks = {},
@@ -71,6 +79,26 @@ function styleResponses (q) {
     return rStyles;
 }
 
+function clearState(state) {
+    usSnap[state].color = "#d3d3d3";
+    usMasks[state].attr({fill: "none"});
+    usSnap[state].unhover();
+    usMasks[state].unhover();
+}
+
+function fillState (state, maxKey, style) {
+    // determine whether single max or tie, fill appropriately
+    if (typeof(maxKey) == "string") {
+        usSnap[state].color = style[maxKey];
+    } else if (typeof(maxKey) == "object") {
+        var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: style[maxKey[0]], fill: style[maxKey[0]], strokeWidth: 3});
+        usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
+        usSnap[state].color = style[maxKey[1]];
+    } else {
+        throw "maxKey type error: " + maxKey;
+    }
+}
+
 function updateLegend (styles) {
     //use party colors if no style provided
     if (!styles) {
@@ -80,7 +108,7 @@ function updateLegend (styles) {
         }
     }
     //clear the legend
-    var sel = document.getElementById('legendKey');
+    var sel = document.getElementById('legend-key');
     while (sel.lastChild) {
         sel.removeChild(sel.lastChild);
     }
@@ -99,44 +127,52 @@ function updateLegend (styles) {
     }
 }
 
-function clearState(state) {
-    usSnap[state].color = "#d3d3d3";
-    usMasks[state].attr({fill: "none"});
-    usSnap[state].unhover(enterFunction, leaveFunction);
-    usMasks[state].unhover(enterFunction, leaveFunction);
-}
-
 // *********************** mouseover stuff ************************
-function enterFunction () {
-    console.log(this);
-}
-
-function leaveFunction () {
-    console.log(this);
-}
-
-function createMouseoverHandlers (state, maxKey, data, styles) {
-    /*if (typeof(maxKey) == "string") {
+function createMouseoverHandlers (state, ques, maxKey, data, styles) {
+    if (typeof(maxKey) == "string") {
         var s = usSnap[state];
     } else if (typeof(maxKey) == "object") {
         var s = usMasks[state];
     }
-    s.hover(enterFunction, leaveFunction);*/
+
+    (function (state, ques, maxKey, data, styles, st) {
+        function mouseEnter () {//state, ques) {
+            //empty/populate infobox div, display it w/ initial x,y of cursor position,
+            //      set this.onmousemove to update its position
+            //console.log(this);
+            var sel = document.getElementById('infobox-data');
+            while (sel.lastChild) {
+                sel.removeChild(sel.lastChild);
+            }
+            for (var res in styles) {
+                var d = document.createElement('div'),
+                    d2 = document.createElement('div'),
+                    s = document.createElement('span');
+                d2.style.cssText = "height:20px;width:20px;display:inline-block;margin:0 5px;background-color:"+styles[res]+";";
+                s.innerHTML = res + ": " + (data[res] || 0) + "%";
+                s.value = styles[res];
+                s.style.cssText = "position:relative;top:-4.5px;margin-right:4px;";
+                d.appendChild(d2);
+                d.appendChild(s);
+                sel.appendChild(d);
+            }
+            document.getElementById("infobox-state").innerHTML = state;
+            document.getElementById("infobox-sample").innerHTML = "<i>" + samples[state][ques] + "</i>";
+            document.getElementsByClassName("infobox-content")[0].style.display = "block";
+
+
+        }
+
+        function mouseLeave () {
+            //call this.unmousemove, set infobox div display to none
+            document.getElementsByClassName("infobox-content")[0].style.display = "none";
+            //console.log(this);
+        }
+
+        st.hover(mouseEnter, mouseLeave);
+    })(state, ques, maxKey, data, styles, s);
 }
 // *********************** mouseover stuff ************************
-
-function fillState (state, maxKey, style) {
-    // determine whether single max or tie, fill appropriately
-    if (typeof(maxKey) == "string") {
-        usSnap[state].color = style[maxKey];
-    } else if (typeof(maxKey) == "object") {
-        var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: style[maxKey[0]], fill: style[maxKey[0]], strokeWidth: 3});
-        usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-        usSnap[state].color = style[maxKey[1]];
-    } else {
-        throw "color fill error " + maxKey;
-    }
-}
 
 function getSet (ques, sel) {
     if (Object.values(candidates).indexOf(sel) > -1 || sel == "percent") {
@@ -169,18 +205,13 @@ function getSet (ques, sel) {
                 }
             }
             if (maxVal > 0) {
-                createMouseoverHandlers(state, maxKey, r, styles || partyColors);
+                createMouseoverHandlers(state, ques, maxKey, r, styles || partyColors);
                 fillState(state, maxKey, styles || partyColors);
             }
         }
-    }
-    updateLegend(styles);
-}
-
-function refillMap() {
-    for (var state in usSnap) {
         usSnap[state].animate({fill: usSnap[state].color}, 500);
     }
+    updateLegend(styles);
 }
 
 function updateMap() {
@@ -208,15 +239,16 @@ function updateMap() {
                 cand = document.getElementById('RBCc').value;
             getSet(ques, cand);
             break;
+        default:
+            throw "updateMap error: " + document.getElementsByClassName("open")[0].id;
     }
-    refillMap();
 }
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 // Get the modal
-var modal = document.getElementById('myModal');
+var modal = document.getElementById('modal-container');
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+var btn = document.getElementById("modal-btn");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 // When the user clicks on the button, open the modal
@@ -304,4 +336,12 @@ window.onload = function () {
         cSel.appendChild(opt);
     }
     updateMap();
+
+    window.onmousemove = function (e) {
+        //pageX/Y or clientX/Y
+        var m = document.getElementsByClassName("infobox-content")[0],
+            o = getIntVal(window.getComputedStyle(document.getElementsByTagName("body")[0]).marginLeft);
+        m.style.left = (e.pageX - o + 10)+ "px";
+        m.style.top = e.pageY + "px";
+    }
 };

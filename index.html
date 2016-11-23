@@ -4,8 +4,20 @@
   <meta charset="utf-8" />
   <title>2016 Presidential Exit Poll Visualizer</title>
   <link rel="stylesheet" href="style.css">
+  <script src="snap.svg-min.js"></script>
+  <script src="us-map-svg.js"></script>
+  <script src="bin/20states.js"></script>
 </head>
 <body>
+
+    <div class="infobox-container">
+        <div class="infobox-content">
+            <h4 id="infobox-state"></h4>
+            <div id="infobox-data"></div>
+            <span id="infobox-sample"></span>
+        </div>
+    </div>
+
     <div class="menu-container">
         <ul class="menu">
             <li><a id="defaultOpen" class="tab" onclick="openTab(event, 'electoralCollege')">
@@ -25,7 +37,7 @@
 
     <div id="electoralCollege" class="tab-content" style="padding-top: 7px">
         <span style="position: relative; left: 415px">
-            <a href="#" id="myBtn">About/FAQ</a> |
+            <a href="#" id="modal-btn">About/FAQ</a> |
             <a target="_blank" href="https://github.com/wbradley93/2016-exit-polls" >Github repo</a>
         </span>
     </div>
@@ -43,7 +55,7 @@
 
     <!-- source: http://www.w3schools.com/howto/howto_css_modals.asp -->
     <!-- The Modal -->
-    <div id="myModal" class="modal">
+    <div id="modal-container" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">x</span>
@@ -58,16 +70,21 @@
       </div>
     </div>
 
-    <div class="legend-container">
-        <div class="legend-content">
-            <h4 style="margin: 3px 5px">Legend:</h4>
-            <div id="legendKey"></div>
+    <div class="infobox-container">
+        <div class="infobox-content">
+            <h4 id="infobox-state"></h4>
+            <div id="infobox-data"></div>
+            <span id="infobox-sample"></span>
         </div>
     </div>
 
-    <script src="snap.svg-min.js"></script>
-    <script src="us-map-svg.js"></script>
-    <script src="bin/20states.js"></script>
+    <div class="legend-container">
+        <div class="legend-content">
+            <h4 style="margin: 3px 5px">Legend</h4>
+            <div id="legend-key"></div>
+        </div>
+    </div>
+
     <script src="map.js"></script>
 </body>
 </html>
