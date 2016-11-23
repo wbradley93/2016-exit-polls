@@ -128,18 +128,15 @@ function updateMap() {
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = partyColors[maxKey];
-                            usSnap[state].animate({fill: usSnap[state].color}, 500);
                         } else if (typeof(maxKey) == "object") {
                             var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: partyColors[maxKey[0]], fill: partyColors[maxKey[0]], strokeWidth: 3})
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usSnap[state].animate({fill: partyColors[maxKey[1]]}, 500);
+                            usSnap[state].color = partyColors[maxKey[1]];
                         } else {
                             console.log(maxKey);
                             throw "color fill error";
                         }
                     }
-                } else {
-                    usSnap[state].animate({fill: usSnap[state].color}, 500);
                 }
             }
             updateLegend();
@@ -148,7 +145,6 @@ function updateMap() {
             for (var state in usSnap) {
                 clearState(state)
                 usSnap[state].color = partyColors[electoralCollege[state]]
-                usSnap[state].animate({fill: usSnap[state].color}, 500);
             }
             updateLegend();
             break;
@@ -176,17 +172,14 @@ function updateMap() {
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = rStyles[maxKey];
-                            usSnap[state].animate({fill: usSnap[state].color}, 500);
                         } else if (typeof(maxKey) == "object") {
                             var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3});
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usSnap[state].animate({fill: rStyles[maxKey[1]]}, 500);
+                            usSnap[state].color = partyColors[maxKey[1]];
                         } else {
                             throw "color fill error";
                         }
                     }
-                } else {
-                    usSnap[state].animate({fill: usSnap[state].color}, 500);
                 }
             }
             updateLegend(rStyles);
@@ -200,9 +193,11 @@ function updateMap() {
                 if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
                     var d = responses[state][ques];
                     var maxKey = "";
-                    var maxVal = 0
+                    var maxVal = 0;
+                    var r = {};
                     for (var ans in d) {
                         v = getIntVal(d[ans][cand])
+                        r[ans] = v;
                         if (v > maxVal) {
                             maxKey = ans;
                             maxVal = v;
@@ -216,21 +211,21 @@ function updateMap() {
                     if (maxVal > 0) {
                         if (typeof(maxKey) == "string") {
                             usSnap[state].color = rStyles[maxKey];
-                            usSnap[state].animate({fill: usSnap[state].color}, 500);
                         } else if (typeof(maxKey) == "object") {
                             var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: rStyles[maxKey[0]], fill: rStyles[maxKey[0]], strokeWidth: 3})
                             usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
-                            usSnap[state].animate({fill: rStyles[maxKey[1]]}, 500);
+                            usSnap[state].color = rStyles[maxKey[1]];
                         } else {
                             throw "color fill error";
                         }
                     }
-                } else {
-                    usSnap[state].animate({fill: usSnap[state].color}, 500);
                 }
             }
             updateLegend(rStyles);
             break;
+    }
+    for (var state in usSnap) {
+        usSnap[state].animate({fill: usSnap[state].color}, 500);
     }
     S.safari();
 }
