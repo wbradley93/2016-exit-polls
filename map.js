@@ -164,8 +164,12 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles = partyColor
     })(state, ques, data, styles, s);
 }
 
+function vals (obj) {
+    return Object.keys(obj).map(function(key) {return obj[key];});
+}
+
 function getSet (ques, sel) {
-    if (Object.values(candidateToParty).indexOf(sel) > -1 || sel == "percent") {
+    if (vals(candidateToParty).indexOf(sel) > -1 || sel == "percent") {
         var col = sel, styles = styleResponses(ques);
     } else {
         var res = sel;
