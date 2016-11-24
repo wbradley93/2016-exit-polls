@@ -6,8 +6,8 @@
  *  TODO: fix style inconsistencies ('/"),
  *      document updateMap, createMouseoverHandlers and getSet,
  *      rename ambiguous variables,
- *      make maxKey object by default; stop checking its type and deal with second element if its there,
- *      deal with infobox going off screen (enforce max x,y vals, defined in terms of infobox width/height),
+ *      fix infobox labels for WCR,
+ *      keep infobox on screen (enforce max x,y vals, defined in terms of infobox width/height),
  *      find slow computers to test on
  *
  * !!!! this code is not clean or final by any means
@@ -15,7 +15,8 @@
 
 var electoralCollege = {"Hawaii": "D", "New Mexico": "D", "Delaware": "D", "South Dakota": "R", "Michigan": "R", "Utah": "R", "North Carolina": "R", "Illinois": "D", "Kansas": "R", "South Carolina": "R", "Idaho": "R", "Washington": "D", "Mississippi": "R", "Kentucky": "R", "New Hampshire": "D", "Florida": "R", "Pennsylvania": "R", "Oklahoma": "R", "New York": "D", "Montana": "R", "California": "D", "Rhode Island": "D", "Nebraska": "R", "New Jersey": "D", "Wyoming": "R", "Oregon": "D", "Arkansas": "R", "Arizona": "R", "Indiana": "R", "Washington DC": "D", "Wisconsin": "R", "Texas": "R", "Maryland": "D", "Vermont": "D", "Missouri": "R", "Iowa": "R", "Maine": "D", "Georgia": "R", "Virginia": "D", "Colorado": "D", "Nevada": "D", "Alaska": "R", "Massachusetts": "D", "West Virginia": "R", "Alabama": "R", "Ohio": "R", "North Dakota": "R", "Tennessee": "R", "Minnesota": "D", "Louisiana": "R", "Connecticut": "D"},
     partyColors = {"R":"#ea1919", "D":"#001dff", "GR":"#18ce00", "LB":"#ffff00", "O":"#ff00e1"},
-    candidates = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"GR", "Other/No Answer":"O"},
+    candidateToParty = {"Trump":"R", "Clinton":"D", "Johnson":"LB", "Stein":"GR", "Other/No Answer":"O"},
+    partyToCandidate = {"R":"Trump", "D":"Clinton", "LB":"Johnson", "GR":"Stein", "O":"Other/No Answer"},
     styles = ["#cb0028","#2b4ab2","#e68100","#a1069e","#989100","#b5adff","#7c3e60"],
     usSnap = {},
     usMasks = {},
@@ -64,6 +65,14 @@ function getIntVal (str) {
     }
 }
 
+function candidateToColor () {
+    var styles = {};
+    for (var candidate in candidateToParty) {
+        styles[candidate] = partyColors[candidateToParty[candidate]];
+    }
+    return styles;
+}
+
 function styleResponses (q) {
     //takes "question\\responses" string, returns object of responses:colors
     var remainingColors = styles.slice(0),
@@ -84,27 +93,18 @@ function clearState(state) {
     usMasks[state].unhover();
 }
 
-function fillState (state, maxKey, style) {
+function fillState (state, maxKey, style = partyColors) {
     // determine whether single max or tie, fill appropriately
-    if (typeof(maxKey) == "string") {
+    if (maxKey.length == 1) {
         usSnap[state].color = style[maxKey];
-    } else if (typeof(maxKey) == "object") {
+    } else {
         var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: style[maxKey[0]], fill: style[maxKey[0]], strokeWidth: 3});
         usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
         usSnap[state].color = style[maxKey[1]];
-    } else {
-        throw "maxKey type error: " + maxKey;
     }
 }
 
-function updateLegend (styles) {
-    //use party colors if no style provided
-    if (!styles) {
-        var styles = {};
-        for (var candidate in candidates) {
-            styles[candidate] = partyColors[candidates[candidate]];
-        }
-    }
+function updateLegend (styles = candidateToColor()) {
     //clear the legend
     var sel = document.getElementById('legend-key');
     while (sel.lastChild) {
@@ -125,18 +125,10 @@ function updateLegend (styles) {
     }
 }
 
-function createMouseoverHandlers (state, ques, maxKey, data, styles) {
-    if (typeof(maxKey) == "string") {
-        var s = usSnap[state];
-    } else if (typeof(maxKey) == "object") {
-        var s = usMasks[state];
-    }
-
-    (function (state, ques, maxKey, data, styles, st) {
-        function mouseEnter () {//state, ques) {
-            //empty/populate infobox div, display it w/ initial x,y of cursor position,
-            //      set this.onmousemove to update its position
-            //console.log(this);
+function createMouseoverHandlers (state, ques, maxKey, data, styles = partyColors) {
+    if (maxKey.length == 1) {var s = usSnap[state];} else {var s = usMasks[state];}
+    (function (state, ques, data, styles, st) {
+        function mouseEnter () {
             var sel = document.getElementById('infobox-data');
             while (sel.lastChild) {
                 sel.removeChild(sel.lastChild);
@@ -151,7 +143,7 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles) {
                 } else {
                     var da = "N/A";
                 }
-                s.innerHTML = res + ": " + da;
+                s.innerHTML = (partyToCandidate[res] || res) + ": " + da;
                 s.value = styles[res];
                 s.style.cssText = "position:relative;top:-4.5px;margin-right:4px;";
                 d.appendChild(d2);
@@ -166,19 +158,16 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles) {
         }
 
         function mouseLeave () {
-            //call this.unmousemove, set infobox div display to none
             document.getElementsByClassName("infobox-content")[0].style.display = "none";
-            //console.log(this);
         }
 
         st.hover(mouseEnter, mouseLeave);
-    })(state, ques, maxKey, data, styles, s);
+    })(state, ques, data, styles, s);
 }
 
 function getSet (ques, sel) {
-    if (Object.values(candidates).indexOf(sel) > -1 || sel == "percent") {
-        var col = sel,
-            styles = styleResponses(ques);
+    if (Object.values(candidateToParty).indexOf(sel) > -1 || sel == "percent") {
+        var col = sel, styles = styleResponses(ques);
     } else {
         var res = sel;
     }
@@ -186,7 +175,7 @@ function getSet (ques, sel) {
         clearState(state)
         if (responses.hasOwnProperty(state) && responses[state].hasOwnProperty(ques)) {
             var d = responses[state][ques][res] || responses[state][ques],
-                maxKey = "",
+                maxKey = [],
                 maxVal = 0,
                 r = {};
             for (var ans in d) {
@@ -196,18 +185,15 @@ function getSet (ques, sel) {
                 var v = getIntVal(d[ans][col] || d[ans]);
                 r[ans] = v;
                 if (v > maxVal) {
-                    maxKey = ans;
+                    maxKey = [ans];
                     maxVal = v;
                 } else if (v == maxVal) {
-                    if (typeof(maxKey) == "string") {
-                        maxKey = [maxKey];
-                    }
                     maxKey.push(ans);
                 }
             }
             if (maxVal > 0) {
-                createMouseoverHandlers(state, ques, maxKey, r, styles || partyColors);
-                fillState(state, maxKey, styles || partyColors);
+                createMouseoverHandlers(state, ques, maxKey, r, styles);
+                fillState(state, maxKey, styles);
             }
         }
         usSnap[state].animate({fill: usSnap[state].color}, 500);
@@ -217,11 +203,6 @@ function getSet (ques, sel) {
 
 function updateMap() {
     switch (document.getElementsByClassName("open")[0].id) {
-        case "candidateByResponse":
-            var ques = document.getElementById('CBRq').value,
-                res = document.getElementById('CBRr').value;
-            getSet(ques, res);
-            break;
         case "electoralCollege":
             for (var state in usSnap) {
                 clearState(state);
@@ -230,6 +211,11 @@ function updateMap() {
                 st.animate({fill: usSnap[state].color}, 500);
             }
             updateLegend();
+            break;
+        case "candidateByResponse":
+            var ques = document.getElementById('CBRq').value,
+                res = document.getElementById('CBRr').value;
+            getSet(ques, res);
             break;
         case "shareOfRespondents":
             var ques = document.getElementById('SORq').value;
@@ -330,10 +316,10 @@ window.onload = function () {
 
     //build list of candidates, append to candidate select div
     var cSel = document.getElementById('RBCc');
-    for (var candidate in candidates) {
+    for (var candidate in candidateToParty) {
         var opt = document.createElement('option');
         opt.innerHTML = candidate;
-        opt.value = candidates[candidate];
+        opt.value = candidateToParty[candidate];
         cSel.appendChild(opt);
     }
     updateMap();
