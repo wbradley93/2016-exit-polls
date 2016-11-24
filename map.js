@@ -6,6 +6,7 @@
  *  TODO: fix style inconsistencies ('/")/rename ambiguous variables,
  *      refactor createMouseoverHandlers/getSet to not need partyToCandidate,
  *      document updateMap, createMouseoverHandlers and getSet,
+ *      cross browser compatibility,
  *      keep infobox on screen (enforce max x,y vals, defined in terms of infobox width/height),
  *
  * !!!! this code is not clean or final by any means

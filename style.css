@@ -1,5 +1,5 @@
 body {
-    width: 1015px;
+    width: 1025px;
     margin: auto;
 }
 
@@ -51,7 +51,7 @@ ul.menu li a:focus, .active {background-color: #ccc;}
 
 #electoralCollege span {
      position: relative;
-     left: 415px;
+     left: 280px;
 }
 
 /* Style the tab content */
