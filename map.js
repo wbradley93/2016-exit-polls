@@ -1,14 +1,12 @@
 /************************************
  *  2016 Exit Poll Data Visualizer
  *  Author: Wes Bradley
- *  Last Modified: 23 Nov 2016
+ *  Last Modified: 24 Nov 2016
  *  Included elsewhere: var responses, samples, questions
- *  TODO: fix style inconsistencies ('/"),
+ *  TODO: fix style inconsistencies ('/")/rename ambiguous variables,
+ *      refactor createMouseoverHandlers/getSet to not need partyToCandidate,
  *      document updateMap, createMouseoverHandlers and getSet,
- *      rename ambiguous variables,
- *      fix infobox labels for WCR,
  *      keep infobox on screen (enforce max x,y vals, defined in terms of infobox width/height),
- *      find slow computers to test on
  *
  * !!!! this code is not clean or final by any means
  ************************************/
