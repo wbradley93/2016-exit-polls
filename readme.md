@@ -2,7 +2,7 @@
 
 See a live visualization [here](https://wbradley93.github.io/2016-exit-polls/). Outlets in the national pool only released so many angles at the data, and Edison charges an ungodly amount for the raw numbers, so I tried to make the next best thing. Credit to [robflaherty's Raphael US map](https://github.com/robflaherty/us-map-raphael) for the map paths.
 
-Data was scraped from CNN's election website, including all 28 states with sufficient polling data and national totals under the 'state' `National`. `bin/20states.js` contains only data for questions asked in at least 20 states (this is the data used in the live demo). Full response data in `bin/full_responses.json` consist of nested JSON objects structured as follows:
+Scraper can be found at `bin/scraper.py`. Data is taken from CNN's election website, including all 28 states with sufficient polling data and national totals under the 'state' `National`. `bin/20states.js` contains only data for questions asked in at least 20 states (this is the data used in the live demo). Full response data in `bin/full_responses.json` consist of nested JSON objects structured as follows:
 
 ```
 {
