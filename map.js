@@ -1,13 +1,20 @@
 /************************************
  *  2016 Exit Poll Data Visualizer
  *  Author: Wes Bradley
- *  Last Modified: 24 Nov 2016
- *  Included elsewhere: var responses, samples, questions
- *  TODO: fix style inconsistencies ('/")/rename ambiguous variables,
- *      refactor createMouseoverHandlers/getSet to not need partyToCandidate,
- *      document updateMap, createMouseoverHandlers and getSet,
- *      cross browser compatibility,
- *      keep infobox on screen (enforce max x,y vals, defined in terms of infobox width/height),
+ *  Last Modified: 26 Nov 2016
+ *  Included elsewhere: var responses, samples, questions, usMap (SVG paths for states)
+ *  Dependencies: Snap.SVG
+ *
+ *  TODO:
+ *      Functionality:
+ *          keep infobox on screen (enforce max x,y vals, defined in terms of infobox/browser width/height),
+ *          !! move too OO design with state class,
+ *          !! firefox not properly computing infobox offset
+ *      Style:
+ *          fix style inconsistencies ('/")/rename ambiguous variables,
+ *          !! refactor createMouseoverHandlers/getSet to not need partyToCandidate,
+ *          document updateMap, createMouseoverHandlers and getSet,
+ *          !! test on more browsers/cross browser compatibility
  *
  * !!!! this code is not clean or final by any means
  ************************************/
@@ -164,6 +171,7 @@ function createMouseoverHandlers (state, ques, maxKey, data, styles = partyColor
     })(state, ques, data, styles, s);
 }
 
+//Object.values is not well-supported
 function vals (obj) {
     return Object.keys(obj).map(function(key) {return obj[key];});
 }
@@ -327,8 +335,8 @@ window.onload = function () {
     }
     updateMap();
 
+    //move mouseover infobox with cursor
     window.onmousemove = function (e) {
-        //pageX/Y or clientX/Y
         var m = document.getElementsByClassName("infobox-content")[0],
             o = getIntVal(window.getComputedStyle(document.getElementsByTagName("body")[0]).marginLeft);
         m.style.left = (e.pageX - o + 10)+ "px";

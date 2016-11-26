@@ -54,6 +54,13 @@ ul.menu li a:focus, .active {background-color: #ccc;}
      left: 280px;
 }
 
+div.browser-message {
+    position: fixed;
+    top: 300px;
+    left: 480px;
+    z-index: -1;
+}
+
 /* Style the tab content */
 .tab-content {
     display: none;
