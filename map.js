@@ -94,15 +94,18 @@ function styleResponses (q) {
 
 function clearState(state) {
     usSnap[state].color = "#d3d3d3";
+    usSnap[state].opacity = 1;
     usMasks[state].attr({fill: "none"});
     usSnap[state].unhover();
     usMasks[state].unhover();
 }
 
-function fillState (state, maxKey, style = partyColors) {
+function fillState (state, maxKey, data, style = partyColors) {
     // determine whether single max or tie, fill appropriately
     if (maxKey.length == 1) {
+        dataSorted = vals(data).sort(function(a,b){return b-a;})
         usSnap[state].color = style[maxKey];
+        usSnap[state].opacity = (dataSorted[0]-dataSorted[1])/10;
     } else {
         var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: style[maxKey[0]], fill: style[maxKey[0]], strokeWidth: 3});
         usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
@@ -204,10 +207,10 @@ function getSet (ques, sel) {
             }
             if (maxVal > 0) {
                 createMouseoverHandlers(state, ques, maxKey, r, styles);
-                fillState(state, maxKey, styles);
+                fillState(state, maxKey, r, styles);
             }
         }
-        usSnap[state].animate({fill: usSnap[state].color}, 500);
+        usSnap[state].animate({fill: usSnap[state].color, "fill-opacity": usSnap[state].opacity}, 500);
     }
     updateLegend(styles);
 }
@@ -301,12 +304,6 @@ window.onload = function () {
       "stroke-dasharray": "none"
     };
 
-    //draw map and store snap paths
-    for (var state in usMap) {
-      usSnap[state] = S.path(usMap[state]).attr(attr);
-      usMasks[state] = S.path(usMap[state]).attr({fill: "none"});
-    }
-
     // collect questions, parse to remove responses, append to question select div
     var qSel = document.getElementsByClassName('question-sel');
     for (var i = 0; i < questions.length; i++) {
@@ -333,7 +330,6 @@ window.onload = function () {
         opt.value = candidateToParty[candidate];
         cSel.appendChild(opt);
     }
-    updateMap();
 
     //move mouseover infobox with cursor
     window.onmousemove = function (e) {
@@ -342,4 +338,13 @@ window.onload = function () {
         m.style.left = (e.pageX - o + 10)+ "px";
         m.style.top = e.pageY + "px";
     }
+
+    //draw map and store snap paths
+    for (var state in usMap) {
+      usSnap[state] = S.path(usMap[state]).attr(attr);
+      usMasks[state] = S.path(usMap[state]).attr({fill: "none"});
+    }
+    updateMap();
+
+    document.getElementsByClassName("browser-message")[0].style.display = "none";
 };
