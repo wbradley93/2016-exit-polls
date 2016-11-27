@@ -222,7 +222,7 @@ function updateMap() {
                 clearState(state);
                 var st = usSnap[state];
                 st.color = partyColors[electoralCollege[state]];
-                st.animate({fill: usSnap[state].color}, 500);
+                st.animate({fill: usSnap[state].color, "fill-opacity": usSnap[state].opacity}, 500);
             }
             updateLegend();
             break;
