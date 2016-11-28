@@ -1,7 +1,7 @@
 /************************************
  *  2016 Exit Poll Data Visualizer
  *  Author: Wes Bradley
- *  Last Modified: 26 Nov 2016
+ *  Last Modified: 28 Nov 2016
  *  Included elsewhere: var responses, samples, questions, usMap (SVG paths for states)
  *  Dependencies: Snap.SVG
  *
@@ -9,12 +9,12 @@
  *      Functionality:
  *          keep infobox on screen (enforce max x,y vals, defined in terms of infobox/browser width/height),
  *          !! move too OO design with state class,
- *          !! firefox not properly computing infobox offset
+ *          !! firefox not properly computing infobox offset,
+ *          !! test on more browsers/cross browser compatibility
  *      Style:
  *          fix style inconsistencies ('/")/rename ambiguous variables,
  *          !! refactor createMouseoverHandlers/getSet to not need partyToCandidate,
- *          document updateMap, createMouseoverHandlers and getSet,
- *          !! test on more browsers/cross browser compatibility
+ *          document updateMap, createMouseoverHandlers and getSet
  *
  * !!!! this code is not clean or final by any means
  ************************************/
