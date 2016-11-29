@@ -105,7 +105,7 @@ function fillState (state, maxKey, data, style = partyColors) {
     if (maxKey.length == 1) {
         dataSorted = vals(data).sort(function(a,b){return b-a;})
         usSnap[state].color = style[maxKey];
-        usSnap[state].opacity = (dataSorted[0]-dataSorted[1])/10;
+        usSnap[state].opacity = (dataSorted[0]-dataSorted[1]+.75)/10;
     } else {
         var pat = S.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({stroke: style[maxKey[0]], fill: style[maxKey[0]], strokeWidth: 3});
         usMasks[state].attr({fill: pat.toPattern(0,0,10,10)});
@@ -195,8 +195,11 @@ function getSet (ques, sel) {
             for (var ans in d) {
                 if (!col && ans == "percent") {
                     continue;
+                } else if (col == "percent") {
+                    var v = getIntVal(d[ans][col])
+                } else {
+                    var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans])
                 }
-                var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans]);
                 r[ans] = v;
                 if (v > maxVal) {
                     maxKey = [ans];
