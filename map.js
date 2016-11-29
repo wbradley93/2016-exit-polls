@@ -196,9 +196,9 @@ function getSet (ques, sel) {
                 if (!col && ans == "percent") {
                     continue;
                 } else if (col == "percent") {
-                    var v = getIntVal(d[ans][col])
+                    var v = getIntVal(d[ans][col]);
                 } else {
-                    var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans])
+                    var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans]);
                 }
                 r[ans] = v;
                 if (v > maxVal) {
