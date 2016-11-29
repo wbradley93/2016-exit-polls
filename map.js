@@ -196,7 +196,7 @@ function getSet (ques, sel) {
                 if (!col && ans == "percent") {
                     continue;
                 }
-                var v = getIntVal(d[ans][col] || d[ans]);
+                var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans]);
                 r[ans] = v;
                 if (v > maxVal) {
                     maxKey = [ans];
