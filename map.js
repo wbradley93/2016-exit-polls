@@ -10,7 +10,8 @@
  *          keep infobox on screen (enforce max x,y vals, defined in terms of infobox/browser width/height),
  *          !! move too OO design with state class,
  *          !! firefox not properly computing infobox offset,
- *          !! test on more browsers/cross browser compatibility
+ *          !! test on more browsers/cross browser compatibility,
+ *          adjust opacity scale for RBC
  *      Style:
  *          fix style inconsistencies ('/")/rename ambiguous variables,
  *          !! refactor createMouseoverHandlers/getSet to not need partyToCandidate,
@@ -198,7 +199,7 @@ function getSet (ques, sel) {
                 } else if (col == "percent") {
                     var v = getIntVal(d[ans][col]);
                 } else {
-                    var v = Math.floor(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"]))/100 || getIntVal(d[ans]);
+                    var v = Math.round(getIntVal(d[ans][col])*getIntVal(d[ans]["percent"])/100) || getIntVal(d[ans]);
                 }
                 r[ans] = v;
                 if (v > maxVal) {
