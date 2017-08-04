@@ -1,6 +1,6 @@
 # 2016 Presidential Election Exit Poll Data
 
-    Status: Functional in certain browsers, map.js to undergo object oriented refactoring
+    Status: Functional in certain browsers. Migration of data into MySQL db in progress, contemplating moving frontend from map.js to Django/Flask.
 
 See a live visualization [here](https://wbradley93.github.io/2016-exit-polls/). Outlets in the national pool only released so many angles at the data, and Edison charges an ungodly amount for the raw numbers, so I tried to make the next best thing. Credit to [robflaherty's Raphael US map](https://github.com/robflaherty/us-map-raphael) for the map paths.
 
